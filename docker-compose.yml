@@ -1,0 +1,39 @@
+version: '2'
+services:
+  mysql:
+    image: 'mysql:5.7'
+    container_name: database-validator
+    restart: 'always'
+    expose:
+      - '3306'
+    ports:
+      - '3307:3306'
+    networks:
+      vpcbr:
+        ipv4_address: 192.168.0.11
+    environment:
+       MYSQL_ROOT_PASSWORD: 'BHU*nji9'
+       MYSQL_DATABASE: 'validator'
+       MYSQL_ROOT_HOST: '%'
+
+  flask-app:
+    build:
+      context: ./FlaskAPP
+    container_name: python-flask-app
+    expose:
+      - '5000'
+    ports:
+      - '5000:5000'
+    networks:
+      vpcbr:
+        ipv4_address: 192.168.0.12
+
+
+
+networks:
+  vpcbr:
+    driver: bridge
+    ipam:
+     config:
+       - subnet: 192.168.0.1/24
+         gateway: 192.168.0.10
